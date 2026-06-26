@@ -16,8 +16,8 @@ const NAV_LINKS = ["Home", "About", "Skills", "Projects", "Photography", "Contac
 const STATS = [
   { value: "2+", label: "AI Projects" },
   { value: "4", label: "Yrs AIML Education" },
-  { value: "creative", label: "photography" },
   { value: "2026", label: "Graduate" },
+  { value: "Hyderabad", label: "India" },
 ];
 
 const FOCUS_TAGS = [
@@ -53,6 +53,9 @@ const PROJECTS = [
     tags: ["Generative AI", "Gemini API", "React", "Python"],
     image: "/projects/gemini-chatbot.jpg",
     color: "from-blue-500/20 to-cyan-500/10",
+
+    github: "https://github.com/svk-19/Gemini-AI-Assistant",
+    demo: "https://gemini-ai-assistant-iq7fvbgzzpw43mnfxexgbt.streamlit.app/",
   },
   {
     title: "Road Accident Severity Prediction",
@@ -67,6 +70,9 @@ const PROJECTS = [
   tags: ["RAG", "Gemini 2.5", "FAISS", "Python"],
   image: "/projects/svk-docai.jpg",
   color: "from-sky-500/20 to-indigo-500/10",
+
+  github: "https://github.com/svk-19/svk-doc-ai",
+  demo: "https://svk-doc-ai-jrr2lfuojcmd46bvtthbqx.streamlit.app/",
 },
 ];
 
@@ -75,16 +81,16 @@ const PHOTO_CATEGORIES = ["All", "Portrait", "Nature", "Street", "Cinematic"];
 const PHOTOS = [
   { id: 1, category: "Portrait", image: "/photos/potrait1.jpg" },
   { id: 2, category: "Portrait", image: "/photos/potrait2.jpg" },
-  { id: 3, category: "Portrait", image: "/photos/potrait3.jpg" },
-  { id: 4, category: "Nature", image: "/photos/nature1.jpg" },
-  { id: 5, category: "Nature", image: "/photos/nature2.jpg" },
-  { id: 6, category: "Nature", image: "/photos/nature3.jpg" },
-  { id: 7, category: "Street", image: "/photos/street1.jpg" },
-  { id: 8, category: "Street", image: "/photos/street2.jpg" },
-  { id: 9, category: "Street", image: "/photos/street3.jpg" },
-  { id: 10, category: "Cinematic", image: "/photos/cinematic1.jpg" },
-  { id: 11, category: "Cinematic", image: "/photos/cinematic2.jpg" },
-  { id: 12, category: "Cinematic", image: "/photos/cinematic3.jpg" },
+  
+  { id: 3, category: "Nature", image: "/photos/nature1.jpg" },
+  { id: 4, category: "Nature", image: "/photos/nature2.jpg" },
+  
+  { id: 5, category: "Street", image: "/photos/street1.jpg" },
+  { id: 6, category: "Street", image: "/photos/street2.jpg" },
+  
+  { id: 7, category: "Cinematic", image: "/photos/cinematic1.jpg" },
+  { id: 8, category: "Cinematic", image: "/photos/cinematic2.jpg" },
+  
 ];
 
 /* ---------------------------------------------------------
@@ -228,7 +234,7 @@ function Hero() {
             transition={{ duration: 0.6, delay: 0.1 }}
             className="text-xs md:text-sm uppercase tracking-[0.3em] text-blue-400 font-medium mb-5"
           >
-            AIML Graduate &middot; Photographer &middot; Creator
+            AIML Graduate &middot; Generative AI Enthusiast &middot; RAG Developer
           </motion.p>
 
           <motion.h1
@@ -527,13 +533,17 @@ function Projects() {
 
                 <div className="flex items-center gap-4 pt-4 border-t border-white/5">
                   <a
-                    href="#"
+                    href={project.github}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="inline-flex items-center gap-1.5 text-xs text-white/60 hover:text-white transition-colors"
                   >
                     <Github size={14} /> Code
                   </a>
                   <a
-                    href="#"
+                    href={project.demo}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="inline-flex items-center gap-1.5 text-xs text-white/60 hover:text-white transition-colors"
                   >
                     <ExternalLink size={14} /> Live Demo
@@ -554,6 +564,7 @@ function Projects() {
 
 function Photography() {
   const [filter, setFilter] = useState("All");
+  const [lightbox, setLightbox] = useState(null);   // ← ADD THIS
 
   const filtered = filter === "All" ? PHOTOS : PHOTOS.filter((p) => p.category === filter);
 
@@ -590,7 +601,7 @@ function Photography() {
           ))}
         </div>
 
-        <motion.div layout className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <motion.div layout className="grid grid-cols-2 md:grid-cols-5 gap-3">
           <AnimatePresence mode="popLayout">
             {filtered.map((photo) => (
               <motion.div
@@ -600,7 +611,8 @@ function Photography() {
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.9 }}
                 transition={{ duration: 0.4 }}
-                className="group relative aspect-[3/4] rounded-xl overflow-hidden border border-white/10"
+                onClick={() => setLightbox(photo)}           // ← ADD THIS
+                className="group relative aspect-[3/4] rounded-xl overflow-hidden border border-white/10 cursor-pointer"  // ← ADD cursor-pointer
               >
                 <img
                   src={photo.image}
@@ -617,6 +629,44 @@ function Photography() {
           </AnimatePresence>
         </motion.div>
       </div>
+
+      {/* ── LIGHTBOX OVERLAY ── ADD THIS BLOCK */}
+      <AnimatePresence>
+        {lightbox && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.25 }}
+            onClick={() => setLightbox(null)}
+            className="fixed inset-0 z-[100] bg-black/90 backdrop-blur-sm flex items-center justify-center p-4"
+          >
+            <button
+              onClick={() => setLightbox(null)}
+              className="absolute top-5 right-5 w-10 h-10 rounded-full bg-white/10 border border-white/20 flex items-center justify-center text-white hover:bg-white/20 transition-colors"
+            >
+              <X size={18} />
+            </button>
+
+            <motion.img
+              initial={{ scale: 0.92, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.92, opacity: 0 }}
+              transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+              src={lightbox.image}
+              alt={lightbox.category}
+              onClick={(e) => e.stopPropagation()}
+              className="max-w-full max-h-[90vh] object-contain rounded-xl shadow-2xl"
+            />
+
+            <div className="absolute bottom-6 left-1/2 -translate-x-1/2 text-xs uppercase tracking-[0.2em] text-white/50">
+              {lightbox.category}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+      {/* ── END LIGHTBOX ── */}
+
     </section>
   );
 }
