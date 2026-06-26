@@ -268,11 +268,12 @@ function Hero() {
             </button>
             <a
               href="/resume.pdf"
-              download="Sunnapu_Vamshi_Krishna_Resume.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
               className="inline-flex items-center gap-2 px-6 py-3 rounded-full border border-white/15 bg-white/5 backdrop-blur-lg text-white/80 text-sm font-medium hover:bg-white/10 hover:border-white/25 transition-all duration-300"
             >
-              <Download size={16} />
-              Download Resume
+              <Eye size={16} />
+              View Resume👁️
             </a>
           </motion.div>
 
