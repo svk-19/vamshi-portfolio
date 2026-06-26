@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence, useMotionValue, useSpring } from "framer-motion";
+import emailjs from "@emailjs/browser";
 import {
   Github, Linkedin, Instagram, Mail, Download, ArrowRight,
   Camera, ExternalLink, Menu, X, GraduationCap, CheckCircle2,
@@ -61,12 +62,12 @@ const PROJECTS = [
     color: "from-indigo-500/20 to-blue-500/10",
   },
   {
-    title: "Privacy Preserving Machine Learning",
-    desc: "A research-driven framework exploring federated learning techniques to train models without centralizing sensitive data.",
-    tags: ["Federated Learning", "Secure AI", "Research"],
-    image: "/projects/privacy-ml.jpg",
-    color: "from-sky-500/20 to-indigo-500/10",
-  },
+  title: "SVK Doc AI",
+  desc: "AI-powered document assistant built with a RAG pipeline, FAISS, Sentence Transformers, and Gemini 2.5 Flash for document Q&A, summarization, semantic search, and conversational memory.",
+  tags: ["RAG", "Gemini 2.5", "FAISS", "Python"],
+  image: "/projects/svk-docai.jpg",
+  color: "from-sky-500/20 to-indigo-500/10",
+},
 ];
 
 const PHOTO_CATEGORIES = ["All", "Portrait", "Nature", "Street", "Cinematic"];
@@ -629,11 +630,33 @@ function Contact() {
   const [sent, setSent] = useState(false);
 
   const handleSubmit = (e) => {
-    e.preventDefault();
-    setSent(true);
-    setTimeout(() => setSent(false), 3000);
-    setForm({ name: "", email: "", message: "" });
-  };
+  e.preventDefault();
+
+  console.log(form);
+
+  emailjs
+    .send(
+      "service_8jwlrtr",
+      "template_58y84f6",
+      {
+        name: form.name,
+        from_email: form.email,
+        message: form.message,
+      },
+      "voHx0IxVXmL1XVTx6"
+    )
+    .then(
+      () => {
+        setSent(true);
+        setTimeout(() => setSent(false), 3000);
+        setForm({ name: "", email: "", message: "" });
+      },
+      (error) => {
+        console.error(error);
+        alert("Failed to send message");
+      }
+    );
+};
 
   return (
     <section id="contact" className="relative py-28 px-6 md:px-12 lg:px-20">
