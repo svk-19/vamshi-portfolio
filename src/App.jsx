@@ -53,7 +53,6 @@ const PROJECTS = [
     tags: ["Generative AI", "Gemini API", "React", "Python"],
     image: "/projects/gemini-chatbot.jpg",
     color: "from-blue-500/20 to-cyan-500/10",
-
     github: "https://github.com/svk-19/Gemini-AI-Assistant",
     demo: "https://gemini-ai-assistant-iq7fvbgzzpw43mnfxexgbt.streamlit.app/",
   },
@@ -65,15 +64,14 @@ const PROJECTS = [
     color: "from-indigo-500/20 to-blue-500/10",
   },
   {
-  title: "SVK Doc AI",
-  desc: "AI-powered document assistant built with a RAG pipeline, FAISS, Sentence Transformers, and Gemini 2.5 Flash for document Q&A, summarization, semantic search, and conversational memory.",
-  tags: ["RAG", "Gemini 2.5", "FAISS", "Python"],
-  image: "/projects/svk-docai.jpg",
-  color: "from-sky-500/20 to-indigo-500/10",
-
-  github: "https://github.com/svk-19/svk-doc-ai",
-  demo: "https://svk-doc-ai-jrr2lfuojcmd46bvtthbqx.streamlit.app/",
-},
+    title: "SVK Doc AI",
+    desc: "AI-powered document assistant built with a RAG pipeline, FAISS, Sentence Transformers, and Gemini 2.5 Flash for document Q&A, summarization, semantic search, and conversational memory.",
+    tags: ["RAG", "Gemini 2.5", "FAISS", "Python"],
+    image: "/projects/svk-docai.jpg",
+    color: "from-sky-500/20 to-indigo-500/10",
+    github: "https://github.com/svk-19/svk-doc-ai",
+    demo: "https://svk-doc-ai-jrr2lfuojcmd46bvtthbqx.streamlit.app/",
+  },
 ];
 
 const PHOTO_CATEGORIES = ["All", "Portrait", "Nature", "Street", "Cinematic"];
@@ -81,16 +79,12 @@ const PHOTO_CATEGORIES = ["All", "Portrait", "Nature", "Street", "Cinematic"];
 const PHOTOS = [
   { id: 1, category: "Portrait", image: "/photos/potrait1.jpg" },
   { id: 2, category: "Portrait", image: "/photos/potrait2.jpg" },
-  
   { id: 3, category: "Nature", image: "/photos/nature1.jpg" },
   { id: 4, category: "Nature", image: "/photos/nature2.jpg" },
-  
   { id: 5, category: "Street", image: "/photos/street1.jpg" },
   { id: 6, category: "Street", image: "/photos/street2.jpg" },
-  
   { id: 7, category: "Cinematic", image: "/photos/cinematic1.jpg" },
   { id: 8, category: "Cinematic", image: "/photos/cinematic2.jpg" },
-  
 ];
 
 /* ---------------------------------------------------------
@@ -483,6 +477,8 @@ function Education() {
 --------------------------------------------------------- */
 
 function Projects() {
+  const [lightbox, setLightbox] = useState(null);
+
   return (
     <section id="projects" className="relative py-28 px-6 md:px-12 lg:px-20">
       <div className="max-w-7xl mx-auto">
@@ -507,14 +503,16 @@ function Projects() {
               transition={{ duration: 0.6, delay: i * 0.12 }}
               className="group rounded-2xl border border-white/10 bg-white/5 backdrop-blur-lg overflow-hidden flex flex-col"
             >
-              <img
-              src={project.image}
-              
-              alt={project.title}
-              
-              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-              
-              />
+              <div
+                className="overflow-hidden cursor-zoom-in"
+                onClick={() => setLightbox(project)}
+              >
+                <img
+                  src={project.image}
+                  alt={project.title}
+                  className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-700"
+                />
+              </div>
 
               <div className="p-6 flex flex-col flex-1">
                 <h3 className="text-lg font-semibold text-white mb-2">{project.title}</h3>
@@ -554,6 +552,43 @@ function Projects() {
           ))}
         </div>
       </div>
+
+      {/* PROJECTS LIGHTBOX */}
+      <AnimatePresence>
+        {lightbox && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.25 }}
+            onClick={() => setLightbox(null)}
+            className="fixed inset-0 z-[100] bg-black/90 backdrop-blur-sm flex items-center justify-center p-4"
+          >
+            <button
+              onClick={() => setLightbox(null)}
+              className="absolute top-5 right-5 w-10 h-10 rounded-full bg-white/10 border border-white/20 flex items-center justify-center text-white hover:bg-white/20 transition-colors"
+            >
+              <X size={18} />
+            </button>
+
+            <motion.img
+              initial={{ scale: 0.92, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.92, opacity: 0 }}
+              transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+              src={lightbox.image}
+              alt={lightbox.title}
+              onClick={(e) => e.stopPropagation()}
+              className="max-w-full max-h-[85vh] object-contain rounded-xl shadow-2xl"
+            />
+
+            <div className="absolute bottom-6 left-1/2 -translate-x-1/2 text-center">
+              <p className="text-white font-medium text-sm">{lightbox.title}</p>
+              <p className="text-white/40 text-xs mt-1">{lightbox.desc}</p>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section>
   );
 }
@@ -564,7 +599,7 @@ function Projects() {
 
 function Photography() {
   const [filter, setFilter] = useState("All");
-  const [lightbox, setLightbox] = useState(null);   // ← ADD THIS
+  const [lightbox, setLightbox] = useState(null);
 
   const filtered = filter === "All" ? PHOTOS : PHOTOS.filter((p) => p.category === filter);
 
@@ -611,8 +646,8 @@ function Photography() {
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.9 }}
                 transition={{ duration: 0.4 }}
-                onClick={() => setLightbox(photo)}           // ← ADD THIS
-                className="group relative aspect-[3/4] rounded-xl overflow-hidden border border-white/10 cursor-pointer"  // ← ADD cursor-pointer
+                onClick={() => setLightbox(photo)}
+                className="group relative aspect-[3/4] rounded-xl overflow-hidden border border-white/10 cursor-pointer"
               >
                 <img
                   src={photo.image}
@@ -630,7 +665,7 @@ function Photography() {
         </motion.div>
       </div>
 
-      {/* ── LIGHTBOX OVERLAY ── ADD THIS BLOCK */}
+      {/* PHOTOGRAPHY LIGHTBOX */}
       <AnimatePresence>
         {lightbox && (
           <motion.div
@@ -665,8 +700,6 @@ function Photography() {
           </motion.div>
         )}
       </AnimatePresence>
-      {/* ── END LIGHTBOX ── */}
-
     </section>
   );
 }
@@ -680,33 +713,33 @@ function Contact() {
   const [sent, setSent] = useState(false);
 
   const handleSubmit = (e) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  console.log(form);
+    console.log(form);
 
-  emailjs
-    .send(
-      "service_8jwlrtr",
-      "template_58y84f6",
-      {
-        name: form.name,
-        from_email: form.email,
-        message: form.message,
-      },
-      "voHx0IxVXmL1XVTx6"
-    )
-    .then(
-      () => {
-        setSent(true);
-        setTimeout(() => setSent(false), 3000);
-        setForm({ name: "", email: "", message: "" });
-      },
-      (error) => {
-        console.error(error);
-        alert("Failed to send message");
-      }
-    );
-};
+    emailjs
+      .send(
+        "service_8jwlrtr",
+        "template_58y84f6",
+        {
+          name: form.name,
+          from_email: form.email,
+          message: form.message,
+        },
+        "voHx0IxVXmL1XVTx6"
+      )
+      .then(
+        () => {
+          setSent(true);
+          setTimeout(() => setSent(false), 3000);
+          setForm({ name: "", email: "", message: "" });
+        },
+        (error) => {
+          console.error(error);
+          alert("Failed to send message");
+        }
+      );
+  };
 
   return (
     <section id="contact" className="relative py-28 px-6 md:px-12 lg:px-20">
@@ -733,7 +766,6 @@ function Contact() {
                 { icon: Mail, label: "vamshikrishna200419@gmail.com", href: "mailto:vamshikrishna200419@gmail.com" },
                 { icon: Github, label: "github.com/svk-19", href: "https://github.com/svk-19" },
                 { icon: Linkedin, label: "linkedin.com/in/vamshi-krishna-93358827a", href: "https://www.linkedin.com/in/vamshi-krishna-93358827a?utm_source=share_via&utm_content=profile&utm_medium=member_android" },
-                
               ].map((item) => {
                 const Icon = item.icon;
                 return (
