@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence, useMotionValue, useSpring } from "framer-motion";
 import emailjs from "@emailjs/browser";
 import {
-  Github, Linkedin, Instagram, Mail, Download, ArrowRight,
+  Github, Linkedin, Instagram, Mail, Download, ArrowRight,Eye,
   Camera, ExternalLink, Menu, X, GraduationCap, CheckCircle2,
   Code2, BrainCircuit, Sparkles, Terminal, GitBranch, MessageSquareCode
 } from "lucide-react";
