@@ -64,7 +64,7 @@ const PROJECTS = [
     color: "from-indigo-500/20 to-blue-500/10",
   },
   {
-    title: "SVK Doc AI",
+    title: "Doc AI with RAG Pipeline",
     desc: "AI-powered document assistant built with a RAG pipeline, FAISS, Sentence Transformers, and Gemini 2.5 Flash for document Q&A, summarization, semantic search, and conversational memory.",
     tags: ["RAG", "Gemini 2.5", "FAISS", "Python"],
     image: "/projects/svk-docai.jpg",
